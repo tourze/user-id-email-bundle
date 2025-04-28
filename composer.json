@@ -30,5 +30,10 @@
     "psr-4": {
       "Tourze\\UserIDEmailBundle\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tourze\\UserIDEmailBundle\\Tests\\": "tests"
+    }
   }
 }
