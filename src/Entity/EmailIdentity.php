@@ -15,14 +15,14 @@ use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
 use Tourze\EasyAdmin\Attribute\Column\ListColumn;
 use Tourze\EasyAdmin\Attribute\Filter\Filterable;
 use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
-use Tourze\UserIDBundle\Contracts\UserIdentityInterface;
+use Tourze\UserIDBundle\Contracts\IdentityInterface;
 use Tourze\UserIDBundle\Model\Identity;
 use Tourze\UserIDEmailBundle\Repository\EmailIdentityRepository;
 
 #[AsPermission(title: '邮箱身份')]
 #[ORM\Entity(repositoryClass: EmailIdentityRepository::class)]
 #[ORM\Table(name: 'ims_user_identity_email', options: ['comment' => '用户身份-电子邮箱'])]
-class EmailIdentity implements UserIdentityInterface
+class EmailIdentity implements IdentityInterface
 {
     public const IDENTITY_TYPE = 'email';
 
@@ -136,11 +136,6 @@ class EmailIdentity implements UserIdentityInterface
     public function getUpdateTime(): ?\DateTimeInterface
     {
         return $this->updateTime;
-    }
-
-    public function getBelongUser(): ?UserInterface
-    {
-        return $this->getUser();
     }
 
     public function getIdentityValue(): string

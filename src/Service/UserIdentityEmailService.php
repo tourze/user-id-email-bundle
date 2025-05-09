@@ -5,7 +5,7 @@ namespace Tourze\UserIDEmailBundle\Service;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Tourze\UserIDBundle\Contracts\UserIdentityInterface;
+use Tourze\UserIDBundle\Contracts\IdentityInterface;
 use Tourze\UserIDBundle\Service\UserIdentityService;
 use Tourze\UserIDEmailBundle\Entity\EmailIdentity;
 use Tourze\UserIDEmailBundle\Repository\EmailIdentityRepository;
@@ -19,7 +19,7 @@ class UserIdentityEmailService implements UserIdentityService
     ) {
     }
 
-    public function findByType(string $type, string $value): ?UserIdentityInterface
+    public function findByType(string $type, string $value): ?IdentityInterface
     {
         // 邮箱
         if (EmailIdentity::IDENTITY_TYPE === $type) {
