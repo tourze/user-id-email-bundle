@@ -24,7 +24,7 @@ class UserIdentityEmailService implements UserIdentityService
         // 邮箱
         if (EmailIdentity::IDENTITY_TYPE === $type) {
             $result = $this->emailIdentityRepository?->findOneBy(['emailAddress' => $value]);
-            if ($result) {
+            if ((bool) $result) {
                 return $result;
             }
         }

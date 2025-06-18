@@ -83,7 +83,7 @@ class EmailIdentityTest extends TestCase
 
     public function testGetSetCreateTime_withValidDateTime(): void
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
         $this->emailIdentity->setCreateTime($dateTime);
         $this->assertSame($dateTime, $this->emailIdentity->getCreateTime());
     }
@@ -96,7 +96,7 @@ class EmailIdentityTest extends TestCase
 
     public function testGetSetUpdateTime_withValidDateTime(): void
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
         $this->emailIdentity->setUpdateTime($dateTime);
         $this->assertSame($dateTime, $this->emailIdentity->getUpdateTime());
     }
@@ -148,7 +148,6 @@ class EmailIdentityTest extends TestCase
         $this->assertSame($email, $identity->getIdentityValue());
         
         $metadata = $identity->getExtra();
-        $this->assertIsArray($metadata);
         $this->assertArrayHasKey('createTime', $metadata);
         $this->assertArrayHasKey('updateTime', $metadata);
         $this->assertSame($dateTime->format('Y-m-d H:i:s'), $metadata['createTime']);
