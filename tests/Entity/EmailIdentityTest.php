@@ -2,7 +2,7 @@
 
 namespace Tourze\UserIDEmailBundle\Tests\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\UserIDBundle\Model\Identity;
@@ -125,28 +125,28 @@ class EmailIdentityTest extends TestCase
         // 设置必要的值
         $id = '123456789';
         $email = 'test@example.com';
-        $dateTime = new DateTime('2023-01-01 12:00:00');
-        
+        $dateTime = new DateTimeImmutable('2023-01-01 12:00:00');
+
         // 使用反射设置私有ID属性
         $reflectionProperty = new \ReflectionProperty(EmailIdentity::class, 'id');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->emailIdentity, $id);
-        
+
         $this->emailIdentity->setEmailAddress($email);
         $this->emailIdentity->setCreateTime($dateTime);
         $this->emailIdentity->setUpdateTime($dateTime);
-        
+
         // 获取结果并转换为数组以便于断言
         $identities = iterator_to_array($this->emailIdentity->getIdentityArray());
-        
+
         $this->assertCount(1, $identities);
         $identity = $identities[0];
-        
+
         $this->assertInstanceOf(Identity::class, $identity);
         $this->assertSame($id, $identity->getId());
         $this->assertSame(EmailIdentity::IDENTITY_TYPE, $identity->getIdentityType());
         $this->assertSame($email, $identity->getIdentityValue());
-        
+
         $metadata = $identity->getExtra();
         $this->assertArrayHasKey('createTime', $metadata);
         $this->assertArrayHasKey('updateTime', $metadata);
@@ -158,4 +158,4 @@ class EmailIdentityTest extends TestCase
     {
         $this->assertSame([], $this->emailIdentity->getAccounts());
     }
-} 
+}
