@@ -7,17 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use Tourze\UserIDBundle\Contracts\IdentityInterface;
 use Tourze\UserIDBundle\Model\Identity;
 use Tourze\UserIDEmailBundle\Repository\EmailIdentityRepository;
 
 #[ORM\Entity(repositoryClass: EmailIdentityRepository::class)]
 #[ORM\Table(name: 'ims_user_identity_email', options: ['comment' => '用户身份-电子邮箱'])]
-class EmailIdentity implements IdentityInterface
+class EmailIdentity implements IdentityInterface, \Stringable
 {
     use TimestampableAware;
+    use BlameableAware;
     public const IDENTITY_TYPE = 'email';
 
     #[ORM\Id]
@@ -26,16 +26,11 @@ class EmailIdentity implements IdentityInterface
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
     private ?string $id = null;
 
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false, options: ['comment' => '邮箱地址'])]
     private string $emailAddress;
 
     #[ORM\ManyToOne]
     private ?UserInterface $user = null;
-
-    #[CreatedByColumn]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    private ?string $updatedBy = null;
 
     public function getId(): ?string
     {
@@ -66,29 +61,7 @@ class EmailIdentity implements IdentityInterface
         return $this;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }public function getIdentityValue(): string
+    public function getIdentityValue(): string
     {
         return $this->getEmailAddress();
     }
@@ -109,5 +82,10 @@ class EmailIdentity implements IdentityInterface
     public function getAccounts(): array
     {
         return [];
+    }
+
+    public function __toString(): string
+    {
+        return $this->getEmailAddress();
     }
 }
