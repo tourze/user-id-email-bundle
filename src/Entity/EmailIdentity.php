@@ -5,7 +5,7 @@ namespace Tourze\UserIDEmailBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use Tourze\UserIDBundle\Contracts\IdentityInterface;
@@ -18,13 +18,9 @@ class EmailIdentity implements IdentityInterface, \Stringable
 {
     use TimestampableAware;
     use BlameableAware;
+    use SnowflakeKeyAware;
     public const IDENTITY_TYPE = 'email';
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false, options: ['comment' => '邮箱地址'])]
     private string $emailAddress;
@@ -32,10 +28,6 @@ class EmailIdentity implements IdentityInterface, \Stringable
     #[ORM\ManyToOne]
     private ?UserInterface $user = null;
 
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
 
     public function getEmailAddress(): string
     {
