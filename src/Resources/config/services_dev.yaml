@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Tourze\UserIDEmailBundle\DataFixtures\EmailIdentityFixtures:
+    autowire: true
+    autoconfigure: true
+    tags:
+      - { name: doctrine.fixture.orm }

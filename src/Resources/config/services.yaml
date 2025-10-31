@@ -8,3 +8,6 @@ services:
     resource: '../../Repository/'
   Tourze\UserIDEmailBundle\Service\:
     resource: '../../Service/'
+  Tourze\UserIDEmailBundle\Controller\:
+    resource: '../../Controller/'
+    tags: ['controller.service_arguments']

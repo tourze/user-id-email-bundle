@@ -2,130 +2,152 @@
 
 namespace Tourze\UserIDEmailBundle\Tests\Entity;
 
-use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use Tourze\UserIDBundle\Model\Identity;
 use Tourze\UserIDEmailBundle\Entity\EmailIdentity;
 
-class EmailIdentityTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(EmailIdentity::class)]
+final class EmailIdentityTest extends AbstractEntityTestCase
 {
+    protected function createEntity(): object
+    {
+        return new EmailIdentity();
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function propertiesProvider(): iterable
+    {
+        return [
+            'emailAddress' => ['emailAddress', 'test_value'],
+        ];
+    }
+
     private EmailIdentity $emailIdentity;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->emailIdentity = new EmailIdentity();
     }
 
-    public function testGetId_withDefault(): void
+    public function testGetIdWithDefault(): void
     {
         $this->assertNull($this->emailIdentity->getId());
     }
 
-    public function testGetSetEmailAddress_withValidData(): void
+    public function testGetSetEmailAddressWithValidData(): void
     {
         $email = 'test@example.com';
         $this->emailIdentity->setEmailAddress($email);
         $this->assertSame($email, $this->emailIdentity->getEmailAddress());
     }
 
-    public function testGetSetEmailAddress_withEmptyString(): void
+    public function testGetSetEmailAddressWithEmptyString(): void
     {
         $this->emailIdentity->setEmailAddress('');
         $this->assertSame('', $this->emailIdentity->getEmailAddress());
     }
 
-    public function testGetSetEmailAddress_withSpecialCharacters(): void
+    public function testGetSetEmailAddressWithSpecialCharacters(): void
     {
         $email = 'test+special.chars@example-domain.com';
         $this->emailIdentity->setEmailAddress($email);
         $this->assertSame($email, $this->emailIdentity->getEmailAddress());
     }
 
-    public function testGetSetUser_withValidUser(): void
+    public function testGetSetUserWithValidUser(): void
     {
         $user = $this->createMock(UserInterface::class);
         $this->emailIdentity->setUser($user);
         $this->assertSame($user, $this->emailIdentity->getUser());
     }
 
-    public function testGetSetUser_withNull(): void
+    public function testGetSetUserWithNull(): void
     {
         $this->emailIdentity->setUser(null);
         $this->assertNull($this->emailIdentity->getUser());
     }
 
-    public function testGetSetCreatedBy_withValidData(): void
+    public function testGetSetCreatedByWithValidData(): void
     {
         $createdBy = 'user123';
         $this->emailIdentity->setCreatedBy($createdBy);
         $this->assertSame($createdBy, $this->emailIdentity->getCreatedBy());
     }
 
-    public function testGetSetCreatedBy_withNull(): void
+    public function testGetSetCreatedByWithNull(): void
     {
         $this->emailIdentity->setCreatedBy(null);
         $this->assertNull($this->emailIdentity->getCreatedBy());
     }
 
-    public function testGetSetUpdatedBy_withValidData(): void
+    public function testGetSetUpdatedByWithValidData(): void
     {
         $updatedBy = 'user456';
         $this->emailIdentity->setUpdatedBy($updatedBy);
         $this->assertSame($updatedBy, $this->emailIdentity->getUpdatedBy());
     }
 
-    public function testGetSetUpdatedBy_withNull(): void
+    public function testGetSetUpdatedByWithNull(): void
     {
         $this->emailIdentity->setUpdatedBy(null);
         $this->assertNull($this->emailIdentity->getUpdatedBy());
     }
 
-    public function testGetSetCreateTime_withValidDateTime(): void
+    public function testGetSetCreateTimeWithValidDateTime(): void
     {
-        $dateTime = new DateTimeImmutable();
+        $dateTime = new \DateTimeImmutable();
         $this->emailIdentity->setCreateTime($dateTime);
         $this->assertSame($dateTime, $this->emailIdentity->getCreateTime());
     }
 
-    public function testGetSetCreateTime_withNull(): void
+    public function testGetSetCreateTimeWithNull(): void
     {
         $this->emailIdentity->setCreateTime(null);
         $this->assertNull($this->emailIdentity->getCreateTime());
     }
 
-    public function testGetSetUpdateTime_withValidDateTime(): void
+    public function testGetSetUpdateTimeWithValidDateTime(): void
     {
-        $dateTime = new DateTimeImmutable();
+        $dateTime = new \DateTimeImmutable();
         $this->emailIdentity->setUpdateTime($dateTime);
         $this->assertSame($dateTime, $this->emailIdentity->getUpdateTime());
     }
 
-    public function testGetSetUpdateTime_withNull(): void
+    public function testGetSetUpdateTimeWithNull(): void
     {
         $this->emailIdentity->setUpdateTime(null);
         $this->assertNull($this->emailIdentity->getUpdateTime());
     }
 
-    public function testGetIdentityValue_returnsEmailAddress(): void
+    public function testGetIdentityValueReturnsEmailAddress(): void
     {
         $email = 'test@example.com';
         $this->emailIdentity->setEmailAddress($email);
         $this->assertSame($email, $this->emailIdentity->getIdentityValue());
     }
 
-    public function testGetIdentityType_returnsEmailType(): void
+    public function testGetIdentityTypeReturnsEmailType(): void
     {
         $this->assertSame(EmailIdentity::IDENTITY_TYPE, $this->emailIdentity->getIdentityType());
         $this->assertSame('email', $this->emailIdentity->getIdentityType());
     }
 
-    public function testGetIdentityArray_withValidData(): void
+    public function testGetIdentityArrayWithValidData(): void
     {
         // 设置必要的值
         $id = '123456789';
         $email = 'test@example.com';
-        $dateTime = new DateTimeImmutable('2023-01-01 12:00:00');
+        $dateTime = new \DateTimeImmutable('2023-01-01 12:00:00');
 
         // 使用反射设置私有ID属性
         $reflectionProperty = new \ReflectionProperty(EmailIdentity::class, 'id');
@@ -154,7 +176,7 @@ class EmailIdentityTest extends TestCase
         $this->assertSame($dateTime->format('Y-m-d H:i:s'), $metadata['updateTime']);
     }
 
-    public function testGetAccounts_returnsEmptyArray(): void
+    public function testGetAccountsReturnsEmptyArray(): void
     {
         $this->assertSame([], $this->emailIdentity->getAccounts());
     }

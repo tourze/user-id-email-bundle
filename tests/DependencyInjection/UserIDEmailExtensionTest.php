@@ -2,19 +2,38 @@
 
 namespace Tourze\UserIDEmailBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractDependencyInjectionExtensionTestCase;
 use Tourze\UserIDEmailBundle\DependencyInjection\UserIDEmailExtension;
 
-class UserIDEmailExtensionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(UserIDEmailExtension::class)]
+final class UserIDEmailExtensionTest extends AbstractDependencyInjectionExtensionTestCase
 {
     private UserIDEmailExtension $extension;
+
     private ContainerBuilder $container;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->extension = new UserIDEmailExtension();
         $this->container = new ContainerBuilder();
+        $this->container->setParameter('kernel.environment', 'test');
+    }
+
+    protected function getExtension(): UserIDEmailExtension
+    {
+        return $this->extension;
+    }
+
+    protected function getContainer(): ContainerBuilder
+    {
+        return $this->container;
     }
 
     public function testLoad(): void

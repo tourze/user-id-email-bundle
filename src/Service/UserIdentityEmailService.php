@@ -3,6 +3,7 @@
 namespace Tourze\UserIDEmailBundle\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\UserIDBundle\Contracts\IdentityInterface;
@@ -11,11 +12,12 @@ use Tourze\UserIDEmailBundle\Entity\EmailIdentity;
 use Tourze\UserIDEmailBundle\Repository\EmailIdentityRepository;
 
 #[AsDecorator(decorates: UserIdentityService::class)]
-class UserIdentityEmailService implements UserIdentityService
+#[Autoconfigure(public: true)]
+readonly class UserIdentityEmailService implements UserIdentityService
 {
     public function __construct(
-        private readonly EmailIdentityRepository $emailIdentityRepository,
-        #[AutowireDecorated] private readonly UserIdentityService $inner,
+        private EmailIdentityRepository $emailIdentityRepository,
+        #[AutowireDecorated] private UserIdentityService $inner,
     ) {
     }
 
