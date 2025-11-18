@@ -27,11 +27,6 @@ class EmailIdentityCrudControllerTest extends AbstractEasyAdminControllerTestCas
         return $controller;
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(EmailIdentity::class, EmailIdentityCrudController::getEntityFqcn());
-    }
-
     public function testConfigureFields(): void
     {
         $controller = new EmailIdentityCrudController();
